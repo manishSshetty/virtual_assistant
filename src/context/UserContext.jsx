@@ -1,4 +1,5 @@
 import React, { createContext } from "react";
+import { sendPrompt } from "../gemini";
 
 export const dataContext = createContext();
 
@@ -12,6 +13,12 @@ const UserContext = ({ children }) => {
     window.speechSynthesis.speak(text_speak);
   }
 
+  async function aiResponse(prompt) {
+    let text=await sendPrompt(prompt)
+    console.log(text)
+    speak(text)
+  }
+
   let speechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition;
 
@@ -22,6 +29,7 @@ const UserContext = ({ children }) => {
         let currentIndex=e.resultIndex
         let transcript=e.results[currentIndex][0].transcript
         console.log(transcript)
+        aiResponse(transcript)
       };
     } catch (error) {
       console.log("speechRecognition api not found")
